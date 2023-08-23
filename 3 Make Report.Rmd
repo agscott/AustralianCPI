@@ -1,0 +1,41 @@
+---
+title: "Australian Consumer Price Index"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+#load("G:\\ConnectingTheDots\\Reference\\CPI\\CPI.RData")
+```
+
+### Quarterly Report with 2 Year Trend
+
+This is a report into the Australian Consumer Price Index (CPI)^[as prepared by the Australian Bureau of Statistics https://www.abs.gov.au] for the quarter ending `r tail(xx$Dates,1)`. The chart below sets out these results over the last 2 years.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(plotly)
+
+  plot_ly(x=~Dates, y=~IncrPer, data=xx, hovertemplate=~paste0("Increase:<br>",IncrPer,"%","<extra></extra>"), type="bar", #colors=c(3:4),
+        text=~signif(IncrPer,2), name="Increase") %>%
+  
+  layout(title=list(text="Australian CPI - Quarterly",font=list(size=15)), 
+         yaxis=list(title="Quarterly Increase - %", dtick=0.2, font=list(size=14)), 
+         xaxis=list(title="Quarter", font=list(size=14)),
+         margin=list(l=50,r=50,b=70,t=70,pad=10)) %>%
+  
+  add_trace(x=~Dates,y=~Index, mode="marker+lines",line=list(width=4), marker=list(size=9),yaxis="y2", type="scatter",
+              yaxis="y2", size=4, name="Raw Index", inherent=T,
+              hovertemplate=~paste0("Index:<br>",Index,"<extra></extra>")) %>%
+  
+  layout(yaxis2 = list(overlaying="y", side="right", title="Index"), legend=list(bgcolor="#D1D1D9"))
+
+```
+#### Details
+
+The bar chart shows the % movement in the CPI for quarter-on-quarter and also the overall index for each quarter between `r min(xx$Dates)` and `r max(xx$Dates)`.
+
+The results show that the CPI index had a `r signif(tail(xx$IncrPer,1),2)`% `r ifelse(tail(xx$IncrPer,1)>=0,Word("increase"),Word("decrease"))` in the latest quarter of `r tail(xx$Dates,1)` and this movement was `r ifelse(abs(tail(xx$IncrPer,1)-tail(xx$IncrPer,2)[-2])>0.5,Word("significantly"),"")` `r ifelse(tail(xx$IncrPer,1)>tail(xx$IncrPer,2)[-2],Word("higher"),Word("lower"))` than the previous quarter of `r signif(tail(xx$IncrPer,2)[-2],2)`%. This corresponds to the axis on the left hand side. The trend in CPI movements for the last 4 quarters has been `r direction(tail(xx$IncrPer,4))`. Over the last 2 years, the highest quarterly movement was `r signif(max(xx$IncrPer),2)`% in `r xx$Dates[which(xx$IncrPer==max(xx$IncrPer))]` followed by `r signif(xx$IncrPer[order(xx$IncrPer, decreasing=T)==2],2)`% in `r xx$Dates[order(xx$IncrPer, decreasing=T)==2]` while the lowest was `r signif(min(xx$IncrPer),2)`% in `r xx$Dates[which(xx$IncrPer==min(xx$IncrPer))]`.
+
+The overlaid line shows the overall index as `r round(tail(xx$Index,1),1)` for the latest quarter of `r tail(xx$Dates,1)` with  this being `r ifelse(abs(tail(xx$Index,1)-tail(xx$Index,2)[-2])>5,Word("significantly"),"")` `r ifelse(tail(xx$Index,1)>tail(xx$Index,2)[-2],Word("higher"),Word("lower"))` than the previous quarter of `r round(tail(xx$Index,2)[-2],1)`. This corresponds to the axis on the right hand side. The trend for the index over the last 4 quarters has been `r direction(tail(xx$Index,5))`.
+
+*Compiled on `r format(Sys.time(),'%d %B %Y')` by [connectingthedots.com.au](https://www.connectingthedots.com.au)*
