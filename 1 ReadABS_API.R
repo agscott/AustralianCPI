@@ -9,7 +9,7 @@ prettify(response)
 
 cpi_data <- fromJSON(content(response, "text"))
 class(cpi_data)
-write_json(cpi_data, "G:\\ConnectingTheDots\\Reference\\CPI\\Response.json", pretty = T)
+write_json(cpi_data, "Response.json", pretty = T)
 
 #attributes(cpi_data$data$structure$dimensions$observation)
 #head(cpi_data$data$structure$dimensions$observation)
