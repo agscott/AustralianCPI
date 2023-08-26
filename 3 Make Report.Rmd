@@ -5,7 +5,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-#load("G:\\ConnectingTheDots\\Reference\\CPI\\CPI.RData")
+load("CPI.RData")
 ```
 
 ### Quarterly Report with 2 Year Trend
@@ -38,4 +38,7 @@ The results show that the CPI index had a `r signif(tail(xx$IncrPer,1),2)`% `r i
 
 The overlaid line shows the overall index as `r round(tail(xx$Index,1),1)` for the latest quarter of `r tail(xx$Dates,1)` with  this being `r ifelse(abs(tail(xx$Index,1)-tail(xx$Index,2)[-2])>5,Word("significantly"),"")` `r ifelse(tail(xx$Index,1)>tail(xx$Index,2)[-2],Word("higher"),Word("lower"))` than the previous quarter of `r round(tail(xx$Index,2)[-2],1)`. This corresponds to the axis on the right hand side. The trend for the index over the last 4 quarters has been `r direction(tail(xx$Index,5))`.
 
-*Compiled on `r format(Sys.time(),'%d %B %Y')` by [connectingthedots.com.au](https://www.connectingthedots.com.au)*
+<center> *Compiled on `r format(Sys.time(),'%d %B %Y')` by*
+[![CPIChart](g:/ConnectingTheDots/Marketing/Logos/connectingthedots.png)](https://www.connectingthedots.com.au) </center>
+
+
